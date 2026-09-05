@@ -1,6 +1,19 @@
 {
-  "background": { "scripts": ["services.js", "background.js"] },
+  "background": {
+    "scripts": [
+      "services.js",
+      "background.js"
+    ]
+  },
   "browser_specific_settings": {
-    "gecko": { "id": "{c8e8a40a-0115-4c44-b981-f2727e472782}", "strict_min_version": "115.0" }
+    "gecko": {
+      "id": "{c8e8a40a-0115-4c44-b981-f2727e472782}",
+      "strict_min_version": "115.0",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
+    }
   }
 }
