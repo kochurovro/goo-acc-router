@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Аккаунты Google</title>
+<style>
+  :root {
+    --ink: #17203a;
+    --muted: #6b7390;
+    --line: #dfe3ee;
+    --bg: #f7f8fc;
+    --card: #ffffff;
+    --accent: #1f4099;
+    --accent-soft: #e6ecfb;
+    --danger: #b3261e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; width: 360px; background: var(--bg); color: var(--ink);
+    font: 14px/1.45 -apple-system, "Segoe UI", Roboto, Inter, sans-serif;
+  }
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px 10px;
+  }
+  h1 { margin: 0; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+  .toggle { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; cursor: pointer; }
+  .toggle input { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; }
+
+  .card { background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 12px 16px; margin-bottom: 8px; }
+  h2 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
+
+  .current { display: none; }
+  .current.show { display: block; }
+  .current p { margin: 0 0 8px; color: var(--muted); font-size: 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    border: 1px solid var(--line); background: var(--bg); border-radius: 999px;
+    padding: 4px 10px; font-size: 12px; cursor: pointer; color: var(--ink); font-family: inherit;
+  }
+  .chip:hover { border-color: var(--accent); background: var(--accent-soft); }
+
+  ul { list-style: none; margin: 0; padding: 0; }
+  .acc { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+  .acc:last-child { border-bottom: 0; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .acc span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .acc button { background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 16px; line-height: 1; padding: 2px 4px; }
+  .acc button:hover { color: var(--danger); }
+
+  .add { display: flex; gap: 6px; margin-top: 10px; }
+  .add input {
+    flex: 1; padding: 7px 10px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 13px; color: var(--ink);
+  }
+  .add input:focus, select:focus, .chip:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .add button {
+    padding: 7px 12px; border: 0; border-radius: 6px; background: var(--accent); color: #fff; font: inherit; font-size: 13px; cursor: pointer;
+  }
+  .empty { color: var(--muted); font-size: 12px; margin: 4px 0; }
+
+  .svc { display: grid; grid-template-columns: 1fr 160px; align-items: center; gap: 8px; padding: 5px 0; }
+  .svc label { font-size: 13px; }
+  select {
+    width: 100%; padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; background: #fff; font: inherit; font-size: 12px; color: var(--ink);
+  }
+  select.set { border-color: var(--accent); background: var(--accent-soft); }
+  .hint { color: var(--muted); font-size: 11px; padding: 0 16px 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Аккаунты Google</h1>
+  <label class="toggle"><input type="checkbox" id="enabled"> авто-подстановка</label>
+</header>
+
+<section class="card current" id="current">
+  <h2 id="currentTitle">Открыть эту страницу как</h2>
+  <div class="chips" id="switchChips"></div>
+</section>
+
+<section class="card">
+  <h2>Аккаунты</h2>
+  <ul id="accounts"></ul>
+  <p class="empty" id="accEmpty">Добавьте e-mail'ы аккаунтов, в которые вы уже вошли в этом браузере.</p>
+  <div class="add">
+    <input id="newEmail" type="email" placeholder="name@gmail.com" autocomplete="off">
+    <button id="addBtn">Добавить</button>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Аккаунт по умолчанию для сервиса</h2>
+  <div id="services"></div>
+</section>
+
+<p class="hint">Пароли не хранятся. Расширение только добавляет <code>authuser=</code> к ссылкам — вход в аккаунты остаётся за Google.</p>
+
+<script src="services.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>
