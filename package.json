@@ -25,6 +25,7 @@
     "build:privacy": "node scripts/build-privacy.mjs",
     "deploy:privacy": "npm run deploy:site",
     "build:site": "node scripts/build-site.mjs",
-    "deploy:site": "node scripts/build-site.mjs && cd firebase && firebase deploy --only hosting --project goo-account-router"
+    "deploy:site": "node scripts/build-site.mjs --release && cd firebase && firebase deploy --only hosting --project goo-account-router",
+    "preview:site": "node scripts/build-site.mjs && cd firebase && firebase serve --only hosting --project goo-account-router"
   }
 }

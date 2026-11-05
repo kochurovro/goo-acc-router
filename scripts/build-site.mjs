@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 // site/index.html -> firebase/public/ (the landing page at https://goo-account-router.web.app/).
-// Also builds /privacy (scripts/build-privacy.mjs), copies the logo and promo image, and the newest signed
-// Firefox .xpi from dist/signed/ (npm run sign:firefox) to /firefox/goo-account-router.xpi.
+// Also builds /privacy (scripts/build-privacy.mjs), copies the logo and promo image, and the signed
+// Firefox .xpi for the current version from dist/signed/ (npm run sign:firefox) to /firefox/goo-account-router.xpi.
+// The .xpi is not in git: without it the page builds for local preview but its download link is dead.
+// --release (used by npm run deploy:site) refuses to build without it, so a deploy never drops the download.
 // The source-code link comes from package.json "repository"; without it the page shows "coming soon".
-// Deploy: npm run deploy:site
-import { readFileSync, writeFileSync, mkdirSync, copyFileSync, readdirSync } from "node:fs";
+// Deploy: npm run deploy:site (runs this with --release, then firebase deploy)
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync, readdirSync, existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import "./build-privacy.mjs";
@@ -16,13 +18,16 @@ const version = pkg.version;
 
 // Signed .xpi for the current version (file names: <hash>-<version>.xpi).
 const signed = join(ROOT, "dist", "signed");
-const xpi = readdirSync(signed).find((f) => f.endsWith(`-${version}.xpi`));
-if (!xpi) {
+const xpi = existsSync(signed) && readdirSync(signed).find((f) => f.endsWith(`-${version}.xpi`));
+if (xpi) {
+  mkdirSync(join(PUB, "firefox"), { recursive: true });
+  copyFileSync(join(signed, xpi), join(PUB, "firefox", "goo-account-router.xpi"));
+} else if (process.argv.includes("--release")) {
   console.error(`✗ no signed .xpi for ${version} in dist/signed: run npm run sign:firefox first`);
   process.exit(1);
+} else {
+  console.warn(`! no signed .xpi for ${version} in dist/signed: the Firefox download link will 404 (fine for preview)`);
 }
-mkdirSync(join(PUB, "firefox"), { recursive: true });
-copyFileSync(join(signed, xpi), join(PUB, "firefox", "goo-account-router.xpi"));
 
 copyFileSync(join(ROOT, "brand", "logo.svg"), join(PUB, "logo.svg"));
 copyFileSync(join(ROOT, "brand", "promo-440x280.png"), join(PUB, "promo.png"));
@@ -45,4 +50,4 @@ const slots = sourceUrl
 let html = readFileSync(join(ROOT, "site", "index.html"), "utf8").replaceAll("__VERSION__", version);
 for (const [k, v] of Object.entries(slots)) html = html.replaceAll(k, v);
 writeFileSync(join(PUB, "index.html"), html);
-console.log(`✓ firebase/public/index.html (v${version}, xpi ${xpi}, source ${sourceUrl ?? "soon"})`);
+console.log(`✓ firebase/public/index.html (v${version}, xpi ${xpi || "missing"}, source ${sourceUrl ?? "soon"})`);

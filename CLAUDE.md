@@ -4,9 +4,9 @@
 
 https://goo-account-router.web.app/ is the landing page; `/privacy` is the policy; `/firefox/goo-account-router.xpi` is the signed self-distributed Firefox build the page installs.
 
-- Landing source: `site/index.html` (a template: `__VERSION__` and `__SOURCE_*__` slots). `scripts/build-site.mjs` fills it into `firebase/public/index.html`, builds `/privacy`, and copies the logo, the promo image and `dist/signed/*-<package.json version>.xpi`. It fails if that version isn't signed yet: run `npm run sign:firefox` after a version bump.
-- The source-code link appears once `package.json` has a `repository` field; until then the page shows "Source code · soon".
-- Publish: `npm run deploy:site` (`deploy:privacy` is an alias). The `.xpi` is served as `application/x-xpinstall` (`firebase/firebase.json`) so Firefox offers to install it.
+- Landing source: `site/index.html` (a template: `__VERSION__` and `__SOURCE_*__` slots). `scripts/build-site.mjs` fills it into `firebase/public/index.html`, builds `/privacy`, and copies the logo, the promo image and `dist/signed/*-<package.json version>.xpi`. `firebase/public/` is build output (gitignored), and the `.xpi` isn't in git: `npm run build:site` without it only warns (fine for preview: `npm run preview:site`), `--release` fails. Run `npm run sign:firefox` after a version bump.
+- The source-code link comes from `package.json` `repository`; without it the page shows "Source code · soon".
+- Publish: `npm run deploy:site` (`deploy:privacy` is an alias), never a bare `firebase deploy --only hosting`: that ships whatever stale `firebase/public/` is on disk. A `predeploy` hook in `firebase.json` doesn't work here: the standalone `firebase` binary puts its own `node` shim first on the hook's PATH. The `.xpi` is served as `application/x-xpinstall` (`firebase/firebase.json`) so Firefox offers to install it.
 - The self-distributed `.xpi` has no `update_url`, so installs from the site don't auto-update.
 
 ## Privacy policy page
