@@ -1,0 +1,181 @@
+{
+  "name": {
+    "message": "Goo Account Router"
+  },
+  "short_name": {
+    "message": "Goo Router"
+  },
+  "description": {
+    "message": "Ouvre chaque service Google dans le compte de votre choix : Gmail dans le compte pro, YouTube dans le perso."
+  },
+  "action_title": {
+    "message": "Goo Account Router"
+  },
+  "html_lang": {
+    "message": "fr"
+  },
+  "popup_title": {
+    "message": "Goo Account Router"
+  },
+  "auto_switch": {
+    "message": "bascule auto"
+  },
+  "access_text": {
+    "message": "L’extension n’a pas accès aux pages Google et YouTube, elle ne peut donc pas changer de compte."
+  },
+  "access_button": {
+    "message": "Autoriser l’accès aux sites Google"
+  },
+  "open_service_as": {
+    "message": "Ouvrir $SERVICE$ avec $EMAIL$",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      },
+      "email": {
+        "content": "$2"
+      }
+    }
+  },
+  "accounts": {
+    "message": "Comptes"
+  },
+  "accounts_empty": {
+    "message": "Ajoutez les adresses des comptes auxquels vous êtes déjà connecté dans ce navigateur."
+  },
+  "add": {
+    "message": "Ajouter"
+  },
+  "remove_account": {
+    "message": "Retirer $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@gmail.com"
+      }
+    }
+  },
+  "no_default": {
+    "message": "— ne pas changer —"
+  },
+  "hint_before": {
+    "message": "Aucun mot de passe enregistré : juste"
+  },
+  "hint_after": {
+    "message": "dans les liens."
+  },
+  "accounts_click_to_open": {
+    "message": "Cliquez sur un compte pour y ouvrir $SERVICE$",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "add_account": {
+    "message": "Ajouter un compte"
+  },
+  "new_email_label": {
+    "message": "Adresse e-mail du compte"
+  },
+  "cancel": {
+    "message": "Annuler"
+  },
+  "err_email": {
+    "message": "Cela ne ressemble pas à une adresse e-mail."
+  },
+  "err_duplicate": {
+    "message": "Ce compte est déjà dans la liste."
+  },
+  "removed": {
+    "message": "$EMAIL$ retiré",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "undo": {
+    "message": "Annuler"
+  },
+  "more_services": {
+    "message": "+ $COUNT$ autres services",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "pin_all": {
+    "message": "Ouvrir tous les services avec ce compte"
+  },
+  "unpin_all": {
+    "message": "Ne plus utiliser ce compte par défaut"
+  },
+  "exceptions": {
+    "message": "Exceptions"
+  },
+  "exceptions_help": {
+    "message": "Tous les services s’ouvrent dans le compte par défaut. Cliquez sur un service pour en choisir un autre."
+  },
+  "exceptions_help_no_default": {
+    "message": "Survolez un compte et cliquez sur « par défaut » pour l’utiliser partout, ou choisissez un compte par service."
+  },
+  "inherit_default": {
+    "message": "Comme tous : $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "skip": {
+    "message": "Ne pas changer"
+  },
+  "account_for": {
+    "message": "Compte pour $SERVICE$",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "default_account": {
+    "message": "par défaut"
+  },
+  "current_hint": {
+    "message": "$SERVICE$ est ouvert dans ce compte",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "settings": {
+    "message": "Paramètres"
+  },
+  "back": {
+    "message": "Retour"
+  },
+  "theme": {
+    "message": "Thème"
+  },
+  "theme_system": {
+    "message": "Système"
+  },
+  "theme_light": {
+    "message": "Clair"
+  },
+  "theme_dark": {
+    "message": "Sombre"
+  },
+  "language": {
+    "message": "Langue"
+  },
+  "language_auto": {
+    "message": "Langue du navigateur"
+  },
+  "privacy_link": {
+    "message": "Politique de confidentialité"
+  }
+}

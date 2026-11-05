@@ -2,3 +2,31 @@ dist/
 node_modules/
 .DS_Store
 web-ext-artifacts/
+__pycache__/
+
+# secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.crx
+*.xpi
+service-account*.json
+
+# Firebase: deploy cache, debug logs, generated hosting output (npm run build:site)
+firebase/.firebase/
+firebase/public/
+*-debug.log
+npm-debug.log*
+
+# local tool settings
+.claude/settings.local.json
+.vscode/
+.idea/
+
+# built by scripts/build-site.mjs
+firebase/public/firefox/
+firebase/public/logo.svg
+firebase/public/promo.png

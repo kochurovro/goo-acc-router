@@ -1,31 +1,33 @@
-// Firefox MV3 (background.scripts) подхватит services.js из манифеста;
-// Chrome (service_worker) — через importScripts.
+// Firefox MV3 (background.scripts) loads these from the manifest;
+// Chrome (service_worker) loads them via importScripts.
 if (typeof importScripts === "function") {
-  try { importScripts("services.js"); } catch (e) { /* уже загружен */ }
+  try { importScripts("config.js", "services.js", "analytics.js"); } catch (e) { /* already loaded */ }
 }
 
 const api = typeof browser !== "undefined" ? browser : chrome;
 
-// Защита от петли: если мы только что перенаправили эту вкладку на этот сервис,
-// не трогаем её снова (Google после authuser часто убирает параметр из URL).
+// Loop guard: if we just redirected this tab to this service, leave it alone
+// (after authuser Google often strips the parameter from the URL).
 const recent = new Map(); // tabId -> { service, ts }
 const COOLDOWN_MS = 15000;
 
 async function getSettings() {
-  const { accounts = [], defaults = {}, enabled = true } = await api.storage.sync.get(["accounts", "defaults", "enabled"]);
-  return { accounts, defaults, enabled };
+  const { accounts = [], defaults = {}, defaultAll = "", enabled = true } =
+    await api.storage.sync.get(["accounts", "defaults", "defaultAll", "enabled"]);
+  return { accounts, defaults, defaultAll, enabled };
 }
 
 api.webNavigation.onBeforeNavigate.addListener(async (details) => {
-  if (details.frameId !== 0) return; // только основная вкладка, не iframe
+  if (details.frameId !== 0) return; // top-level frame only, not iframes
   const service = serviceForUrl(details.url);
   if (!service) return;
+  pingDaily().catch(() => {});
   if (urlHasAccount(details.url)) return;
 
-  const { defaults, enabled, accounts } = await getSettings();
-  if (!enabled) return;
-  const email = defaults[service];
-  if (!email || !accounts.includes(email)) return;
+  const settings = await getSettings();
+  if (!settings.enabled) return;
+  const email = accountFor(service, settings);
+  if (!email) return;
 
   const r = recent.get(details.tabId);
   if (r && r.service === service && Date.now() - r.ts < COOLDOWN_MS) return;
@@ -33,27 +35,34 @@ api.webNavigation.onBeforeNavigate.addListener(async (details) => {
 
   try {
     await api.tabs.update(details.tabId, { url: withAccount(details.url, email) });
+    countStat("redirects", email);
   } catch (e) {
-    // вкладка могла закрыться
+    countStat("errors"); // usually the tab was closed meanwhile
   }
 });
 
 api.tabs.onRemoved.addListener((tabId) => recent.delete(tabId));
 
-// Ручное переключение из popup: открыть текущую вкладку под другим аккаунтом.
+// Anonymous usage stats (see analytics.js). The service worker is short-lived, so also check on navigations.
+api.runtime.onInstalled.addListener(({ reason }) => { if (reason === "install") statsOnInstall().then(pingDaily); else pingDaily(); });
+api.runtime.onStartup.addListener(pingDaily);
+
+// Manual switch from the popup: reopen the current tab under another account.
+// tabs.query exposes tab.url only for tabs covered by host_permissions, which is all we need.
 api.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (msg?.type === "switch") {
     (async () => {
       const [tab] = await api.tabs.query({ active: true, currentWindow: true });
       if (!tab?.url || !serviceForUrl(tab.url)) return sendResponse({ ok: false, reason: "not-google" });
       const url = new URL(tab.url);
-      // убираем /u/N/ чтобы authuser сработал
+      // drop /u/N/ so that authuser takes effect
       url.pathname = url.pathname.replace(/\/u\/\d+(?=\/|$)/, "");
       url.searchParams.set("authuser", msg.email);
       recent.set(tab.id, { service: serviceForUrl(tab.url), ts: Date.now() });
       await api.tabs.update(tab.id, { url: url.toString() });
+      countStat("manualSwitches", msg.email);
       sendResponse({ ok: true });
-    })();
+    })().catch(() => { countStat("errors"); sendResponse({ ok: false }); });
     return true;
   }
 });

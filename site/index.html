@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Goo Account Router</title>
+<meta name="description" content="A browser extension that opens each Google service in the account you choose: Gmail in your work account, YouTube in your personal one.">
+<meta property="og:title" content="Goo Account Router">
+<meta property="og:description" content="Open each Google service in the account you choose.">
+<meta property="og:image" content="https://goo-account-router.web.app/promo.png">
+<meta property="og:url" content="https://goo-account-router.web.app/">
+<meta name="theme-color" content="#1f4099">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<style>
+  /* Brand: brand/BRAND.md. Router Indigo #1f4099 carries the page; Signal Orange #f97316 marks only "the chosen account". */
+  :root {
+    --ink: #151c33; --muted: #565e7a; --line: #dde1ec; --bg: #f5f6fa; --card: #ffffff; --hover: #eef1f8;
+    --accent: #1f4099; --accent-soft: #e7ecfa; --on-accent: #ffffff; --code: #eef1f8;
+    --indigo: #1f4099; --orange: #f97316;
+    --shadow: 0 1px 2px rgb(21 28 51 / .08), 0 8px 24px -8px rgb(21 28 51 / .14), 0 0 0 1px rgb(21 28 51 / .06);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e6e9f4; --muted: #a0a7c0; --line: #2a3049; --bg: #0e1120; --card: #171b2c; --hover: #20263b;
+      --accent: #9fb3ff; --accent-soft: #222b52; --on-accent: #0b1233; --code: #20263b;
+      --shadow: 0 1px 2px rgb(0 0 0 / .4), 0 12px 32px -12px rgb(0 0 0 / .6), 0 0 0 1px rgb(255 255 255 / .06);
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); text-underline-offset: 2px; }
+  code { font: 0.88em ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--code); padding: 1px 5px; border-radius: 4px; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+  h1, h2, h3 { text-wrap: balance; letter-spacing: -0.02em; }
+  p, li { text-wrap: pretty; }
+
+  /* Top bar */
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+  .brand img { width: 32px; height: 32px; display: block; }
+  .top nav { display: flex; gap: 20px; font-size: 15px; }
+  .top nav a { color: var(--muted); text-decoration: none; }
+  .top nav a:hover { color: var(--ink); }
+
+  /* Hero */
+  .hero { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; padding: 48px 0 80px; }
+  .hero h1 { font-size: clamp(36px, 5.4vw, 56px); line-height: 1.05; margin: 0 0 20px; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .lede { font-size: 19px; color: var(--muted); margin: 0 0 32px; max-width: 34em; }
+  .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 10px; font-weight: 600; font-size: 16px; text-decoration: none; transition: transform .12s ease-out, background .15s ease-out; }
+  .btn:active { transform: scale(.97); }
+  .btn svg { width: 20px; height: 20px; flex: none; }
+  .btn-primary { background: var(--indigo); color: #fff; box-shadow: 0 1px 2px rgb(31 64 153 / .3), 0 6px 16px -6px rgb(31 64 153 / .5); }
+  .btn-primary:hover { background: #1a3684; }
+  .btn-ghost { color: var(--ink); background: var(--card); box-shadow: var(--shadow); }
+  .btn-ghost:hover { background: var(--hover); }
+  .btn[aria-disabled="true"] { color: var(--muted); background: transparent; box-shadow: inset 0 0 0 1px var(--line); cursor: default; }
+  .btn[aria-disabled="true"]:active { transform: none; }
+  .soon { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; padding: 2px 7px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); }
+  .fineprint { margin: 16px 0 0; font-size: 14px; color: var(--muted); }
+
+  /* Demo card: looks like the popup's per-service defaults */
+  .demo { background: var(--card); border-radius: 16px; box-shadow: var(--shadow); padding: 20px; }
+  .demo-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; font-size: 13px; color: var(--muted); font-weight: 600; }
+  .services { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+  .services button { font: inherit; font-size: 14px; color: var(--ink); background: var(--hover); border: 0; border-radius: 99px; padding: 7px 14px; min-height: 36px; cursor: pointer; transition: background .15s ease-out, color .15s ease-out; }
+  .services button[aria-pressed="true"] { background: var(--indigo); color: #fff; }
+  .lanes { display: grid; grid-template-columns: 56px 1fr; align-items: stretch; }
+  .lanes svg { width: 56px; height: 100%; overflow: visible; }
+  .lanes svg path { fill: none; stroke: var(--line); stroke-width: 3; stroke-linecap: round; transition: stroke .25s ease-out; }
+  .lanes svg path.on { stroke: var(--orange); }
+  .lanes svg circle { fill: var(--accent); }
+  .accounts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .acct { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 8px 12px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--line); transition: box-shadow .2s ease-out, background .2s ease-out; }
+  .acct.on { box-shadow: inset 0 0 0 2px var(--orange); background: color-mix(in srgb, var(--orange) 7%, transparent); }
+  .av { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 13px; font-weight: 700; flex: none; }
+  .acct-text { min-width: 0; flex: 1; }
+  .acct-mail { font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .acct-role { font-size: 13px; color: var(--muted); }
+  .badge { font-size: 12px; font-weight: 700; color: #9a3412; background: #ffedd5; border-radius: 99px; padding: 2px 8px; opacity: 0; transition: opacity .2s ease-out; }
+  @media (prefers-color-scheme: dark) { .badge { color: #fed7aa; background: #4a2412; } }
+  .acct.on .badge { opacity: 1; }
+  .url { margin-top: 18px; padding: 12px 14px; border-radius: 10px; background: var(--code); font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; color: var(--muted); }
+  .url b { color: var(--ink); font-weight: 600; }
+  .url mark { background: none; color: var(--accent); font-weight: 700; }
+
+  /* Sections */
+  section { padding: 72px 0; border-top: 1px solid var(--line); }
+  section h2 { font-size: clamp(26px, 3.4vw, 34px); line-height: 1.15; margin: 0 0 12px; }
+  .sub { color: var(--muted); margin: 0 0 40px; max-width: 40em; }
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; counter-reset: step; }
+  .steps li { background: var(--card); border-radius: 14px; box-shadow: var(--shadow); padding: 24px; counter-increment: step; }
+  .steps li::before { content: counter(step); display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: var(--indigo); color: #fff; font-weight: 700; font-size: 15px; margin-bottom: 16px; }
+  .steps h3 { font-size: 18px; margin: 0 0 6px; }
+  .steps p { margin: 0; color: var(--muted); font-size: 16px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
+  .chips li { background: var(--card); box-shadow: inset 0 0 0 1px var(--line); border-radius: 99px; padding: 6px 14px; font-size: 15px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  .checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+  .checks li { position: relative; padding-left: 30px; }
+  .checks li::before { content: ""; position: absolute; left: 0; top: .35em; width: 18px; height: 18px; border-radius: 50%; background: var(--accent-soft); box-shadow: inset 0 0 0 5px var(--accent-soft), inset 0 0 0 9px var(--accent); }
+  .panel { background: var(--card); border-radius: 16px; box-shadow: var(--shadow); padding: 28px; }
+  .panel h3 { margin: 0 0 8px; font-size: 20px; }
+  .panel p { margin: 0 0 20px; color: var(--muted); }
+
+  footer { border-top: 1px solid var(--line); padding: 32px 0 48px; font-size: 14px; color: var(--muted); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; }
+  footer nav { display: flex; gap: 20px; }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; gap: 40px; padding: 24px 0 56px; }
+    .steps, .two { grid-template-columns: 1fr; }
+    .two { gap: 32px; }
+    section { padding: 56px 0; }
+  }
+  @media (max-width: 520px) {
+    .wrap { padding: 0 16px; }
+    .top nav a.hide-sm { display: none; }
+    .cta .btn { width: 100%; justify-content: center; }
+    .demo { padding: 16px; }
+    .lanes { grid-template-columns: 40px 1fr; }
+    .lanes svg { width: 40px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="/"><img src="/logo.svg" alt="" width="32" height="32">Goo Account Router</a>
+    <nav aria-label="Main">
+      <a class="hide-sm" href="#how">How it works</a>
+      <a class="hide-sm" href="#privacy">Privacy</a>
+      <a href="#install">Install</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <h1>Every Google service, in <em>the right account</em>.</h1>
+        <p class="lede">Signed in to work and personal accounts at once? Pick a default account for each service once. Gmail opens in work, YouTube in personal, every time, from any link.</p>
+        <div class="cta" id="install">
+          <a class="btn btn-primary" href="/firefox/goo-account-router.xpi">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+            Add to Firefox
+          </a>
+          __SOURCE_BUTTON__
+        </div>
+        <p class="fineprint">Version __VERSION__ · Firefox 115+ · signed by Mozilla · free, MIT license. Chrome and Edge versions are on the way.</p>
+      </div>
+
+      <div class="demo" aria-label="Example: which account each service opens in">
+        <div class="demo-head"><span>Open this service as…</span><span aria-hidden="true">example</span></div>
+        <div class="services" role="group" aria-label="Service">
+          <button type="button" data-s="0" aria-pressed="true">Gmail</button>
+          <button type="button" data-s="1" aria-pressed="false">YouTube</button>
+          <button type="button" data-s="2" aria-pressed="false">Drive</button>
+          <button type="button" data-s="3" aria-pressed="false">Calendar</button>
+        </div>
+        <div class="lanes">
+          <svg viewBox="0 0 56 184" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M6 92 C30 92 30 26 54 26"/>
+            <path d="M6 92 H54"/>
+            <path d="M6 92 C30 92 30 158 54 158"/>
+            <circle cx="6" cy="92" r="5"/>
+          </svg>
+          <ul class="accounts">
+            <li class="acct"><span class="av" style="background:#1f4099">A</span><span class="acct-text"><div class="acct-mail">alex@company.com</div><div class="acct-role">Work</div></span><span class="badge">default</span></li>
+            <li class="acct"><span class="av" style="background:#0f766e">A</span><span class="acct-text"><div class="acct-mail">alex.home@gmail.com</div><div class="acct-role">Personal</div></span><span class="badge">default</span></li>
+            <li class="acct"><span class="av" style="background:#7e22ce">S</span><span class="acct-text"><div class="acct-mail">studio@sidegig.dev</div><div class="acct-role">Side project</div></span><span class="badge">default</span></li>
+          </ul>
+        </div>
+        <div class="url" aria-live="polite"><b id="host">mail.google.com</b>/<span id="path">mail/</span>?<mark>authuser=<span id="who">alex@company.com</span></mark></div>
+      </div>
+    </div>
+
+    <section id="how">
+      <h2>How it works</h2>
+      <p class="sub">No new sign-in and no account juggling. The extension adds Google's own <code>authuser=</code> parameter to the link before the page loads, so the service opens in the account you picked.</p>
+      <ol class="steps">
+        <li><h3>Add your accounts</h3><p>Type the email addresses you're already signed in to in this browser.</p></li>
+        <li><h3>Pick a default per service</h3><p>Gmail → work, YouTube → personal, Drive → side project. Or leave a service alone.</p></li>
+        <li><h3>Just click links</h3><p>Every link opens in the right account. Need another one? Reopen the page as any account from the toolbar.</p></li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Works with the services you use</h2>
+      <p class="sub">Each one gets its own default account.</p>
+      <ul class="chips">
+        <li>Gmail</li><li>Drive</li><li>Docs, Sheets, Slides</li><li>Calendar</li><li>Meet</li><li>Chat</li><li>Keep</li><li>Photos</li><li>Contacts</li><li>YouTube</li><li>YouTube Studio &amp; Music</li><li>Maps</li><li>Gemini</li><li>Cloud Console</li><li>Admin Console</li><li>Play Console</li><li>Analytics</li><li>Google Account</li>
+      </ul>
+    </section>
+
+    <section id="privacy">
+      <div class="two">
+        <div>
+          <h2>Small, quiet, private</h2>
+          <p class="sub">A tool you install and forget. It reads Google and YouTube addresses only to decide where to send them.</p>
+        </div>
+        <ul class="checks">
+          <li>Your account list and settings stay in your browser.</li>
+          <li>No passwords, cookies or browsing history are stored. Google still handles sign-in.</li>
+          <li>Access is limited to google.com and youtube.com pages.</li>
+          <li>Only an anonymous daily usage count is sent to the developer: no emails, no URLs, no ID. In Firefox you can turn it off in the add-on's permissions.</li>
+          <li>No ads, no remote code. <a href="/privacy">Read the privacy policy</a>.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="two">
+        <div class="panel">
+          <h3>Install in Firefox</h3>
+          <p>Click the button, then confirm “Add” in the Firefox prompt. If Firefox asks whether to allow this site to install add-ons, choose “Continue to installation”.</p>
+          <a class="btn btn-primary" href="/firefox/goo-account-router.xpi">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+            Add to Firefox
+          </a>
+        </div>
+        <div class="panel">
+          <h3>Open source</h3>
+          <p>MIT-licensed, zero dependencies, readable in an evening. __SOURCE_TEXT__</p>
+          __SOURCE_BUTTON__
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Goo Account Router · Not affiliated with or endorsed by Google.</span>
+    <nav aria-label="Footer"><a href="/privacy">Privacy</a>__SOURCE_FOOTER__</nav>
+  </footer>
+</div>
+
+<script>
+  // Demo: which account each service routes to. Index into the account list above.
+  const routes = [
+    { host: "mail.google.com", path: "mail/", acct: 0 },
+    { host: "www.youtube.com", path: "watch", acct: 1 },
+    { host: "drive.google.com", path: "drive/", acct: 2 },
+    { host: "calendar.google.com", path: "calendar/", acct: 0 },
+  ];
+  const accts = [...document.querySelectorAll(".acct")];
+  const lanes = [...document.querySelectorAll(".lanes path")];
+  const buttons = [...document.querySelectorAll(".services button")];
+  const $ = (id) => document.getElementById(id);
+  function show(i) {
+    const r = routes[i];
+    buttons.forEach((b, j) => b.setAttribute("aria-pressed", String(j === i)));
+    accts.forEach((a, j) => a.classList.toggle("on", j === r.acct));
+    lanes.forEach((p, j) => p.classList.toggle("on", j === r.acct));
+    $("host").textContent = r.host;
+    $("path").textContent = r.path;
+    $("who").textContent = accts[r.acct].querySelector(".acct-mail").textContent;
+  }
+  buttons.forEach((b, i) => b.addEventListener("click", () => show(i)));
+  show(0);
+</script>
+</body>
+</html>

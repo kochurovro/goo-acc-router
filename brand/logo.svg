@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">
+  <title>Goo Account Router</title>
+  <!-- Tile: Router Indigo -->
+  <rect width="96" height="96" rx="22" fill="#1f4099"/>
+  <!-- One input splits into three account lanes -->
+  <g fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 48H70"/>
+    <path d="M36 48C52 48 52 24 68 24"/>
+    <path d="M36 48C52 48 52 72 68 72"/>
+  </g>
+  <circle cx="21" cy="48" r="9" fill="#fff"/>
+  <circle cx="72" cy="48" r="10" fill="#fff"/>
+  <circle cx="72" cy="72" r="10" fill="#fff"/>
+  <!-- The chosen lane: Signal Orange -->
+  <circle cx="72" cy="24" r="10" fill="#f97316"/>
+</svg>

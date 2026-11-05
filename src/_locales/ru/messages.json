@@ -1,0 +1,181 @@
+{
+  "name": {
+    "message": "Goo Account Router"
+  },
+  "short_name": {
+    "message": "Goo Router"
+  },
+  "description": {
+    "message": "Открывает каждый сервис Google в нужном аккаунте: Gmail в рабочем, YouTube в личном."
+  },
+  "action_title": {
+    "message": "Goo Account Router"
+  },
+  "html_lang": {
+    "message": "ru"
+  },
+  "popup_title": {
+    "message": "Goo Account Router"
+  },
+  "auto_switch": {
+    "message": "авто-подстановка"
+  },
+  "access_text": {
+    "message": "У расширения нет доступа к страницам Google и YouTube, поэтому оно не может переключать аккаунты."
+  },
+  "access_button": {
+    "message": "Разрешить доступ к сайтам Google"
+  },
+  "open_service_as": {
+    "message": "Открыть $SERVICE$ как $EMAIL$",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      },
+      "email": {
+        "content": "$2"
+      }
+    }
+  },
+  "accounts": {
+    "message": "Аккаунты"
+  },
+  "accounts_empty": {
+    "message": "Добавьте e-mail'ы аккаунтов, в которые вы уже вошли в этом браузере."
+  },
+  "add": {
+    "message": "Добавить"
+  },
+  "remove_account": {
+    "message": "Удалить $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@gmail.com"
+      }
+    }
+  },
+  "no_default": {
+    "message": "— не менять —"
+  },
+  "hint_before": {
+    "message": "Пароли не хранятся: только"
+  },
+  "hint_after": {
+    "message": "в ссылках."
+  },
+  "accounts_click_to_open": {
+    "message": "Нажмите на аккаунт, чтобы открыть в нём $SERVICE$",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "add_account": {
+    "message": "Добавить аккаунт"
+  },
+  "new_email_label": {
+    "message": "E-mail аккаунта"
+  },
+  "cancel": {
+    "message": "Отмена"
+  },
+  "err_email": {
+    "message": "Это не похоже на e-mail."
+  },
+  "err_duplicate": {
+    "message": "Этот аккаунт уже есть в списке."
+  },
+  "removed": {
+    "message": "Удалён $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "undo": {
+    "message": "Вернуть"
+  },
+  "more_services": {
+    "message": "+ ещё $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "pin_all": {
+    "message": "Открывать все сервисы в этом аккаунте"
+  },
+  "unpin_all": {
+    "message": "Больше не использовать этот аккаунт по умолчанию"
+  },
+  "exceptions": {
+    "message": "Исключения"
+  },
+  "exceptions_help": {
+    "message": "Все сервисы открываются в аккаунте по умолчанию. Нажмите на сервис, чтобы выбрать другой."
+  },
+  "exceptions_help_no_default": {
+    "message": "Наведите на аккаунт и нажмите «по умолчанию», чтобы открывать в нём все сервисы, или выберите аккаунт для отдельных."
+  },
+  "inherit_default": {
+    "message": "Как у всех: $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "skip": {
+    "message": "Не переключать"
+  },
+  "account_for": {
+    "message": "Аккаунт для $SERVICE$",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "default_account": {
+    "message": "по умолчанию"
+  },
+  "current_hint": {
+    "message": "$SERVICE$ открыт в этом аккаунте",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "settings": {
+    "message": "Настройки"
+  },
+  "back": {
+    "message": "Назад"
+  },
+  "theme": {
+    "message": "Тема"
+  },
+  "theme_system": {
+    "message": "Системная"
+  },
+  "theme_light": {
+    "message": "Светлая"
+  },
+  "theme_dark": {
+    "message": "Тёмная"
+  },
+  "language": {
+    "message": "Язык"
+  },
+  "language_auto": {
+    "message": "Язык браузера"
+  },
+  "privacy_link": {
+    "message": "Политика конфиденциальности"
+  }
+}

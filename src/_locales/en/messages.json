@@ -1,0 +1,188 @@
+{
+  "name": {
+    "message": "Goo Account Router",
+    "description": "Extension name. Must not contain the word Google."
+  },
+  "short_name": {
+    "message": "Goo Router"
+  },
+  "description": {
+    "message": "Open each Google service in the account you choose: Gmail in your work account, YouTube in your personal one.",
+    "description": "Store/manifest description, max 132 characters."
+  },
+  "action_title": {
+    "message": "Goo Account Router",
+    "description": "Tooltip of the toolbar button."
+  },
+  "html_lang": {
+    "message": "en",
+    "description": "BCP 47 language tag of this translation, used for <html lang>."
+  },
+  "popup_title": {
+    "message": "Goo Account Router"
+  },
+  "auto_switch": {
+    "message": "auto-switch",
+    "description": "Label of the on/off toggle for automatic account switching."
+  },
+  "access_text": {
+    "message": "The extension has no access to Google and YouTube pages, so it can't switch accounts."
+  },
+  "access_button": {
+    "message": "Allow access to Google sites"
+  },
+  "open_service_as": {
+    "message": "Open $SERVICE$ as $EMAIL$",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      },
+      "email": {
+        "content": "$2"
+      }
+    }
+  },
+  "accounts": {
+    "message": "Accounts"
+  },
+  "accounts_empty": {
+    "message": "Add the email addresses of the accounts you're already signed in to in this browser."
+  },
+  "add": {
+    "message": "Add"
+  },
+  "remove_account": {
+    "message": "Remove $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@gmail.com"
+      }
+    }
+  },
+  "no_default": {
+    "message": "— don't change —",
+    "description": "Option meaning: leave the account as is for this service."
+  },
+  "hint_before": {
+    "message": "No passwords stored: just"
+  },
+  "hint_after": {
+    "message": "in links."
+  },
+  "accounts_click_to_open": {
+    "message": "Click an account to open $SERVICE$ in it",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "add_account": {
+    "message": "Add account"
+  },
+  "new_email_label": {
+    "message": "Email of the account"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "err_email": {
+    "message": "That doesn't look like an email address."
+  },
+  "err_duplicate": {
+    "message": "This account is already in the list."
+  },
+  "removed": {
+    "message": "Removed $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "undo": {
+    "message": "Undo"
+  },
+  "more_services": {
+    "message": "+ $COUNT$ more services",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "pin_all": {
+    "message": "Open all services in this account"
+  },
+  "unpin_all": {
+    "message": "Stop using this account by default"
+  },
+  "exceptions": {
+    "message": "Exceptions"
+  },
+  "exceptions_help": {
+    "message": "Every service opens in the default account. Click a service to pick another."
+  },
+  "exceptions_help_no_default": {
+    "message": "Hover an account and click “default account” to use it everywhere, or pick accounts per service."
+  },
+  "inherit_default": {
+    "message": "Like all: $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "skip": {
+    "message": "Don't switch"
+  },
+  "account_for": {
+    "message": "Account for $SERVICE$",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "default_account": {
+    "message": "default account"
+  },
+  "current_hint": {
+    "message": "$SERVICE$ is open in this account",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "back": {
+    "message": "Back"
+  },
+  "theme": {
+    "message": "Theme"
+  },
+  "theme_system": {
+    "message": "System"
+  },
+  "theme_light": {
+    "message": "Light"
+  },
+  "theme_dark": {
+    "message": "Dark"
+  },
+  "language": {
+    "message": "Language"
+  },
+  "language_auto": {
+    "message": "Browser language"
+  },
+  "privacy_link": {
+    "message": "Privacy policy",
+    "description": "Link in Settings to the privacy policy page."
+  }
+}

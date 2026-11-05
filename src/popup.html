@@ -1,101 +1,269 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Аккаунты Google</title>
+<title data-i18n="popup_title"></title>
+<script src="theme.js"></script>
 <style>
+  /* One screen, no scroll: accounts double as "open this page as" buttons,
+     per-service defaults are a wrap of chips (native <select> under each chip) instead of 17 rows. */
+  /* Two themes. Default follows the system; data-theme="light|dark" (Settings) forces one.
+     Neutrals are indigo-tinted so the brand accent #1f4099 belongs to them; dark is not inverted light:
+     surfaces step up in lightness (bg < card < hover), the accent lifts to a pastel to keep 8:1 on cards.
+     Avatar fills (--av-*) are per theme: white initial >= 4.5:1, circle >= 3:1 against the card. */
   :root {
-    --ink: #17203a;
-    --muted: #6b7390;
-    --line: #dfe3ee;
-    --bg: #f7f8fc;
-    --card: #ffffff;
-    --accent: #1f4099;
-    --accent-soft: #e6ecfb;
-    --danger: #b3261e;
+    --ink: #151c33; --muted: #565e7a; --line: #dde1ec; --control: #868da6;
+    --bg: #f5f6fa; --card: #ffffff; --raised: #ffffff; --hover: #eef1f8;
+    --accent: #1f4099; --accent-soft: #e7ecfa; --on-accent: #ffffff; --danger: #b3261e;
+    --knob: #ffffff; --shadow: 0 1px 2px rgb(21 28 51 / .12), 0 0 0 1px rgb(21 28 51 / .06);
+    --av-0: #1f4099; --av-1: #c2410c; --av-2: #0f766e; --av-3: #7e22ce;
+    --av-4: #b45309; --av-5: #be185d; --av-6: #4d7c0f; --av-7: #0e7490;
+    --radius: 8px;
+    --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px;
+    --fs-xs: 11px; --fs-sm: 12px; --fs-md: 13px; --fs-lg: 16px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #e6e9f4; --muted: #a0a7c0; --line: #2a3049; --control: #6f7796;
+      --bg: #0e1120; --card: #171b2c; --raised: #2a3150; --hover: #20263b;
+      --accent: #9fb3ff; --accent-soft: #222b52; --on-accent: #0b1233; --danger: #ff8f85;
+      --knob: #e6e9f4; --shadow: 0 1px 2px rgb(0 0 0 / .5), 0 0 0 1px rgb(255 255 255 / .06);
+      --av-0: #4565d0; --av-1: #c64a15; --av-2: #107d76; --av-3: #8f3fd9;
+      --av-4: #a95d0a; --av-5: #cc2f72; --av-6: #52800f; --av-7: #127e9a;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e6e9f4; --muted: #a0a7c0; --line: #2a3049; --control: #6f7796;
+    --bg: #0e1120; --card: #171b2c; --raised: #2a3150; --hover: #20263b;
+    --accent: #9fb3ff; --accent-soft: #222b52; --on-accent: #0b1233; --danger: #ff8f85;
+    --knob: #e6e9f4; --shadow: 0 1px 2px rgb(0 0 0 / .5), 0 0 0 1px rgb(255 255 255 / .06);
+    --av-0: #4565d0; --av-1: #c64a15; --av-2: #107d76; --av-3: #8f3fd9;
+    --av-4: #a95d0a; --av-5: #cc2f72; --av-6: #52800f; --av-7: #127e9a;
+    color-scheme: dark;
   }
   * { box-sizing: border-box; }
   body {
-    margin: 0; width: 360px; background: var(--bg); color: var(--ink);
-    font: 14px/1.45 -apple-system, "Segoe UI", Roboto, Inter, sans-serif;
+    margin: 0; width: 380px; background: var(--bg); color: var(--ink);
+    font: var(--fs-md)/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
-  header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 16px 10px;
-  }
-  h1 { margin: 0; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
-  .toggle { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; cursor: pointer; }
-  .toggle input { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; }
+  button, input, select { font: inherit; color: inherit; }
+  :lang(ja) { word-break: auto-phrase; } /* break Japanese at phrase boundaries, not mid-word */
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
-  .card { background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 12px 16px; margin-bottom: 8px; }
-  h2 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
+  header { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); padding: 10px var(--s4); }
+  .header-end { display: flex; align-items: center; gap: var(--s2); }
+  h1 { margin: 0; font-size: var(--fs-lg); font-weight: 600; letter-spacing: -0.01em; }
+  .switch { display: flex; align-items: center; gap: var(--s2); color: var(--muted); font-size: var(--fs-sm); cursor: pointer; white-space: nowrap; min-height: 32px; }
+  .switch input { appearance: none; margin: 0; width: 30px; height: 18px; border-radius: 9px; background: var(--control); position: relative; cursor: pointer; transition: background .15s ease-out; flex: none; }
+  .switch input::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--knob); transition: transform .15s ease-out; }
+  .switch input:checked { background: var(--accent); }
+  .switch input:checked::after { transform: translateX(12px); background: var(--on-accent); }
 
-  .current { display: none; }
-  .current.show { display: block; }
-  .current p { margin: 0 0 8px; color: var(--muted); font-size: 12px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip {
-    border: 1px solid var(--line); background: var(--bg); border-radius: 999px;
-    padding: 4px 10px; font-size: 12px; cursor: pointer; color: var(--ink); font-family: inherit;
-  }
-  .chip:hover { border-color: var(--accent); background: var(--accent-soft); }
+  section { background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 10px var(--s4) var(--s3); margin-bottom: 6px; }
+  h2 { margin: 0; font-size: var(--fs-sm); font-weight: 600; color: var(--muted); }
+  .sub { margin: 2px 0 0; font-size: var(--fs-sm); color: var(--muted); }
+  .sub b { color: var(--ink); font-weight: 600; }
+  .head { margin-bottom: var(--s2); }
 
+  /* access banner */
+  .access { display: none; background: var(--accent-soft); }
+  .access.show { display: block; }
+  .access p { margin: 0 0 var(--s2); font-size: var(--fs-sm); }
+
+  .btn { height: 32px; padding: 0 var(--s3); border-radius: var(--radius); border: 1px solid transparent; cursor: pointer; font-size: var(--fs-md); white-space: nowrap; }
+  .btn.primary { background: var(--accent); color: var(--on-accent); }
+  .btn.ghost { background: transparent; border-color: var(--line); color: var(--muted); }
+  .btn.ghost:hover { color: var(--ink); background: var(--hover); }
+  .btn:active { transform: scale(.97); }
+
+  /* accounts */
   ul { list-style: none; margin: 0; padding: 0; }
-  .acc { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px dashed var(--line); }
-  .acc:last-child { border-bottom: 0; }
-  .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
-  .acc span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .acc button { background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 16px; line-height: 1; padding: 2px 4px; }
-  .acc button:hover { color: var(--danger); }
+  .acc { display: flex; align-items: center; gap: var(--s1); border-radius: var(--radius); }
+  .acc-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: var(--s2); min-height: 32px; padding: 0 var(--s2); margin-left: calc(-1 * var(--s2)); border: 0; background: none; border-radius: var(--radius); text-align: left; }
+  button.acc-main { cursor: pointer; }
+  button.acc-main:hover { background: var(--hover); }
+  button.acc-main:disabled { opacity: .6; cursor: progress; }
+  /* local part shrinks with an ellipsis, the domain always stays visible */
+  .email { flex: 1; min-width: 0; display: flex; white-space: nowrap; overflow: hidden; }
+  .here-mark { flex: none; width: 16px; height: 16px; color: var(--accent); }
+  .email .local { min-width: 1ch; overflow: hidden; text-overflow: ellipsis; }
+  .email .domain { flex: none; }
 
-  .add { display: flex; gap: 6px; margin-top: 10px; }
-  .add input {
-    flex: 1; padding: 7px 10px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 13px; color: var(--ink);
-  }
-  .add input:focus, select:focus, .chip:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
-  .add button {
-    padding: 7px 12px; border: 0; border-radius: 6px; background: var(--accent); color: #fff; font: inherit; font-size: 13px; cursor: pointer;
-  }
-  .empty { color: var(--muted); font-size: 12px; margin: 4px 0; }
+  .av { width: 20px; height: 20px; border-radius: 50%; flex: none; display: grid; place-items: center; color: #fff; font-size: var(--fs-xs); font-style: normal; font-weight: 700; line-height: 1; text-transform: uppercase; }
+  .av.none { background: transparent; border: 1.5px dashed var(--control); }
 
-  .svc { display: grid; grid-template-columns: 1fr 160px; align-items: center; gap: 8px; padding: 5px 0; }
-  .svc label { font-size: 13px; }
-  select {
-    width: 100%; padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; background: #fff; font: inherit; font-size: 12px; color: var(--ink);
+  .icon { position: relative; width: 28px; height: 28px; flex: none; display: grid; place-items: center; border: 0; background: none; border-radius: 6px; color: var(--muted); cursor: pointer; }
+  .icon::after { content: ""; position: absolute; inset: -4px; }
+  .icon:hover { background: var(--hover); color: var(--ink); }
+  .icon svg { width: 16px; height: 16px; }
+  /* "default account" pill: always shown (filled) on the default account, revealed on hover elsewhere */
+  .def { position: relative; flex: none; height: 22px; padding: 0 8px; border-radius: 999px; border: 1px dashed var(--control); background: transparent; color: var(--muted); font-size: var(--fs-xs); white-space: nowrap; cursor: pointer; transition: opacity .12s ease-out, background .12s ease-out; }
+  .def::after { content: ""; position: absolute; inset: -6px -2px; }
+  .def:hover { color: var(--accent); border-color: var(--accent); }
+  .def[aria-pressed="true"] { border: 1px solid transparent; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .del:hover { color: var(--danger); }
+  @media (hover: hover) {
+    /* hidden controls take no room, so unhovered rows keep the full email */
+    .acc .del, .acc .def[aria-pressed="false"] { display: none; }
+    .acc:hover .del, .acc:focus-within .del,
+    .acc:hover .def, .acc:focus-within .def { display: grid; place-items: center; }
   }
-  select.set { border-color: var(--accent); background: var(--accent-soft); }
-  .hint { color: var(--muted); font-size: 11px; padding: 0 16px 12px; }
+
+  .add-row { margin-top: var(--s1); }
+  .add-open { display: flex; align-items: center; gap: var(--s2); width: 100%; min-height: 32px; padding: 0 var(--s2); margin-left: calc(-1 * var(--s2)); border: 0; background: none; border-radius: var(--radius); color: var(--accent); cursor: pointer; text-align: left; }
+  .add-open:hover { background: var(--hover); }
+  .add-open .av { border: 1.5px dashed currentColor; color: currentColor; font-size: var(--fs-lg); font-weight: 400; }
+  form.add { display: none; gap: var(--s2); }
+  .adding form.add { display: flex; }
+  .adding .add-open { display: none; }
+  form.add input { flex: 1; min-width: 0; height: 32px; padding: 0 var(--s3); border: 1px solid var(--control); border-radius: var(--radius); background: var(--card); }
+  form.add input[aria-invalid="true"] { border-color: var(--danger); }
+  .err { margin: var(--s1) 0 0; color: var(--danger); font-size: var(--fs-sm); min-height: 0; }
+  .err:empty { display: none; }
+  .empty { margin: 0 0 var(--s2); color: var(--muted); font-size: var(--fs-sm); }
+
+  /* services */
+  .svcs { display: flex; flex-wrap: wrap; gap: 6px; }
+  .svc { position: relative; display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px 0 4px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); font-size: var(--fs-sm); color: var(--muted); white-space: nowrap; }
+  .svc .av { width: 18px; height: 18px; font-size: 10px; }
+  .svc.set { color: var(--ink); border-color: var(--control); }
+  .svc.inherit .av { opacity: .35; }
+  .av.skip { background: transparent; border: 1.5px solid var(--muted); position: relative; overflow: hidden; }
+  .av.skip::after { content: ""; position: absolute; width: 1.5px; height: 140%; background: var(--muted); transform: rotate(45deg); }
+  .svc.here { box-shadow: 0 0 0 2px var(--accent); border-color: transparent; }
+  .svc:hover { background: var(--hover); }
+  .svc:focus-within { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .svc select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; border: 0; }
+  .svc select:focus-visible { outline: none; }
+  .svcs.off { opacity: .55; }
+  .svc.more { padding: 0 10px; color: var(--accent); border-style: dashed; border-color: var(--accent); background: transparent; cursor: pointer; }
+
+  .hint { margin: 0; padding: 0 var(--s4) 10px; color: var(--muted); font-size: var(--fs-xs); }
+  .hint code { font-size: var(--fs-xs); }
+
+
+
+  /* settings view: replaces the main view; header (with the gear) stays */
+  .icon[aria-expanded="true"] { background: var(--accent-soft); color: var(--accent); }
+  .icon .gear { transition: transform .3s ease-out; }
+  .icon[aria-expanded="true"] .gear { transform: rotate(60deg); }
+  body.in-settings #mainView { display: none; }
+  #settings { padding: 10px var(--s4) var(--s4); }
+  .settings-head { display: flex; align-items: center; gap: var(--s1); margin: 0 0 var(--s3) calc(-1 * var(--s2)); }
+  .settings-head h2 { font-size: var(--fs-md); color: var(--ink); }
+  .field { margin: 0 0 var(--s4); padding: 0; border: 0; min-width: 0; }
+  .field-label { display: block; padding: 0; margin: 0 0 6px; font-size: var(--fs-sm); font-weight: 600; color: var(--muted); }
+  /* segmented control: native radios (arrow keys, form semantics), visually a track with a raised thumb */
+  .seg { display: flex; gap: 2px; padding: 2px; border-radius: var(--radius); background: var(--bg); box-shadow: inset 0 0 0 1px var(--line); }
+  .seg label { position: relative; flex: 1 1 0; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 32px; padding: 0 var(--s2); border-radius: 6px; color: var(--muted); cursor: pointer; text-align: center; transition: background .15s ease-out, color .15s ease-out; }
+  .seg label:hover { color: var(--ink); }
+  .seg input { position: absolute; opacity: 0; width: 0; height: 0; margin: 0; }
+  .seg label:has(input:checked) { background: var(--raised); color: var(--ink); font-weight: 600; box-shadow: var(--shadow); }
+  .seg label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .seg svg { width: 16px; height: 16px; flex: none; }
+  /* secondary links below the settings, separated by a hairline */
+  .link-row { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); min-height: 36px; margin: 0 calc(-1 * var(--s2)); padding: 0 var(--s2); border-top: 1px solid var(--line); border-radius: 0; color: var(--ink); text-decoration: none; }
+  .link-row:hover { background: var(--hover); color: var(--accent); }
+  .link-row svg { width: 16px; height: 16px; flex: none; color: var(--muted); }
+  .select { position: relative; }
+  .select select { appearance: none; width: 100%; height: 36px; padding: 0 36px 0 var(--s3); border: 1px solid var(--control); border-radius: var(--radius); background: var(--card); cursor: pointer; }
+  .select select:hover { border-color: var(--muted); }
+  .select svg { position: absolute; right: var(--s3); top: 50%; width: 16px; height: 16px; margin-top: -8px; color: var(--muted); pointer-events: none; }
+
+  /* undo */
+  .toast { position: fixed; left: var(--s3); right: var(--s3); bottom: var(--s3); display: flex; align-items: center; justify-content: space-between; gap: var(--s3); padding: var(--s2) var(--s2) var(--s2) var(--s3); border-radius: var(--radius); background: var(--ink); color: var(--bg); font-size: var(--fs-sm); transform: translateY(150%); transition: transform .2s ease-out; }
+  .toast.show { transform: none; }
+  .toast span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .toast button { height: 28px; padding: 0 var(--s3); border: 0; border-radius: 6px; background: transparent; color: var(--bg); font-weight: 600; cursor: pointer; text-decoration: underline; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
 <body>
 <header>
-  <h1>Аккаунты Google</h1>
-  <label class="toggle"><input type="checkbox" id="enabled"> авто-подстановка</label>
+  <h1 data-i18n="popup_title"></h1>
+  <div class="header-end">
+    <label class="switch"><input type="checkbox" id="enabled" role="switch"> <span data-i18n="auto_switch"></span></label>
+    <button class="icon" id="settingsBtn" type="button" aria-expanded="false" aria-controls="settings" data-i18n-aria="settings"><svg aria-hidden="true" class="gear"><use href="#i-gear"/></svg></button>
+  </div>
 </header>
 
-<section class="card current" id="current">
-  <h2 id="currentTitle">Открыть эту страницу как</h2>
-  <div class="chips" id="switchChips"></div>
+<div id="mainView">
+
+<section class="access" id="access" role="alert">
+  <p data-i18n="access_text"></p>
+  <button class="btn primary" id="grantBtn" type="button" data-i18n="access_button"></button>
 </section>
 
-<section class="card">
-  <h2>Аккаунты</h2>
+<section id="accSection" aria-labelledby="accTitle">
+  <div class="head">
+    <h2 id="accTitle" data-i18n="accounts"></h2>
+    <p class="sub" id="accSub" hidden></p>
+  </div>
+  <p class="empty" id="accEmpty" data-i18n="accounts_empty"></p>
   <ul id="accounts"></ul>
-  <p class="empty" id="accEmpty">Добавьте e-mail'ы аккаунтов, в которые вы уже вошли в этом браузере.</p>
-  <div class="add">
-    <input id="newEmail" type="email" placeholder="name@gmail.com" autocomplete="off">
-    <button id="addBtn">Добавить</button>
+  <div class="add-row" id="addRow">
+    <button class="add-open" id="addOpen" type="button"><i class="av" aria-hidden="true">+</i><span data-i18n="add_account"></span></button>
+    <form class="add" id="addForm" novalidate>
+      <input id="newEmail" type="email" placeholder="name@gmail.com" autocomplete="off" aria-describedby="addErr" data-i18n-aria="new_email_label">
+      <button class="btn primary" type="submit" data-i18n="add"></button>
+      <button class="btn ghost" type="button" id="addCancel" data-i18n="cancel"></button>
+    </form>
+    <p class="err" id="addErr" role="alert"></p>
   </div>
 </section>
 
-<section class="card">
-  <h2>Аккаунт по умолчанию для сервиса</h2>
-  <div id="services"></div>
+<section aria-labelledby="svcTitle">
+  <div class="head">
+    <h2 id="svcTitle" data-i18n="exceptions"></h2>
+    <p class="sub" id="svcSub"></p>
+  </div>
+  <div class="svcs" id="services"></div>
 </section>
 
-<p class="hint">Пароли не хранятся. Расширение только добавляет <code>authuser=</code> к ссылкам — вход в аккаунты остаётся за Google.</p>
+<p class="hint"><span data-i18n="hint_before"></span> <code>authuser=</code> <span data-i18n="hint_after"></span></p>
 
+</div>
+
+<section id="settings" hidden aria-labelledby="settingsTitle">
+  <div class="settings-head">
+    <button class="icon" id="settingsBack" type="button" data-i18n-aria="back"><svg aria-hidden="true"><use href="#i-back"/></svg></button>
+    <h2 id="settingsTitle" data-i18n="settings"></h2>
+  </div>
+  <fieldset class="field">
+    <legend class="field-label" data-i18n="theme"></legend>
+    <div class="seg" id="themeSeg">
+      <label><input type="radio" name="theme" value="system"><svg aria-hidden="true"><use href="#i-system"/></svg><span data-i18n="theme_system"></span></label>
+      <label><input type="radio" name="theme" value="light"><svg aria-hidden="true"><use href="#i-sun"/></svg><span data-i18n="theme_light"></span></label>
+      <label><input type="radio" name="theme" value="dark"><svg aria-hidden="true"><use href="#i-moon"/></svg><span data-i18n="theme_dark"></span></label>
+    </div>
+  </fieldset>
+  <div class="field">
+    <label class="field-label" for="langSelect" data-i18n="language"></label>
+    <div class="select"><select id="langSelect"></select><svg aria-hidden="true"><use href="#i-chevron"/></svg></div>
+  </div>
+  <a class="link-row" href="https://goo-account-router.web.app/privacy" target="_blank" rel="noopener"><span data-i18n="privacy_link"></span><svg aria-hidden="true"><use href="#i-external"/></svg></a>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText"></span><button type="button" id="undoBtn" data-i18n="undo"></button></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></g></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></g></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-system" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></g></symbol>
+</svg>
+
+<script src="config.js"></script>
 <script src="services.js"></script>
+<script src="i18n.js"></script>
 <script src="popup.js"></script>
 </body>
 </html>

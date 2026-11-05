@@ -1,0 +1,40 @@
+rules_version = '2';
+// Anonymous usage stats from the extension (src/analytics.js).
+// Clients may only create well-formed "pings"; nobody can read, update or delete them through the API key.
+// Read the data in the Firebase console or BigQuery export (admin access bypasses these rules).
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /pings/{id} {
+      allow create: if isPing(request.resource.data);
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function str(d, k, max) { return !(k in d) || (d[k] is string && d[k].size() <= max); }
+    function bool(d, k) { return !(k in d) || d[k] is bool; }
+    function oneOf(d, k, values) { return !(k in d) || d[k] in values; }
+    function accountBucket(d, k) { return oneOf(d, k, ["0", "1", "2", "3-5", "6+"]); }
+    function countBucket(d, k) { return oneOf(d, k, ["0", "1", "2-5", "6-20", "21-100", "101+"]); }
+
+    function isPing(d) {
+      return d.keys().hasOnly(["event", "ext", "lang", "os", "arch", "browser", "browserVersion", "mobile", "source",
+                               "accounts", "accountsPersonal", "accountsWork", "enabled", "hasDefault",
+                               "exceptions", "exceptionServices", "hostAccess", "installAge",
+                               "redirects", "manualSwitches", "errors", "accountsUsed", "ts"])
+        && d.keys().hasAll(["event", "ext", "ts"])
+        && d.event in ["install", "active"]
+        && d.ts == request.time
+        && str(d, "ext", 20) && str(d, "lang", 10) && str(d, "os", 20) && str(d, "arch", 20)
+        && str(d, "browser", 40) && str(d, "browserVersion", 10) && bool(d, "mobile")
+        && oneOf(d, "source", ["cws", "edge", "amo", "self", "dev", "admin"])
+        && accountBucket(d, "accounts") && accountBucket(d, "accountsPersonal") && accountBucket(d, "accountsWork")
+        && accountBucket(d, "accountsUsed")
+        && bool(d, "enabled") && bool(d, "hasDefault") && bool(d, "hostAccess")
+        && (!("exceptions" in d) || (d.exceptions is int && d.exceptions >= 0 && d.exceptions <= 50))
+        && (!("exceptionServices" in d) || (d.exceptionServices is list && d.exceptionServices.size() <= 50))
+        && oneOf(d, "installAge", ["0", "1-7", "8-30", "31-90", "91+", "unknown"])
+        && countBucket(d, "redirects") && countBucket(d, "manualSwitches") && countBucket(d, "errors");
+    }
+  }
+}

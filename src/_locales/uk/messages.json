@@ -1,0 +1,181 @@
+{
+  "name": {
+    "message": "Goo Account Router"
+  },
+  "short_name": {
+    "message": "Goo Router"
+  },
+  "description": {
+    "message": "Відкриває кожен сервіс Google у потрібному акаунті: Gmail у робочому, YouTube в особистому."
+  },
+  "action_title": {
+    "message": "Goo Account Router"
+  },
+  "html_lang": {
+    "message": "uk"
+  },
+  "popup_title": {
+    "message": "Goo Account Router"
+  },
+  "auto_switch": {
+    "message": "автоперемикання"
+  },
+  "access_text": {
+    "message": "Розширення не має доступу до сторінок Google і YouTube, тому не може перемикати акаунти."
+  },
+  "access_button": {
+    "message": "Дозволити доступ до сайтів Google"
+  },
+  "open_service_as": {
+    "message": "Відкрити $SERVICE$ як $EMAIL$",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      },
+      "email": {
+        "content": "$2"
+      }
+    }
+  },
+  "accounts": {
+    "message": "Акаунти"
+  },
+  "accounts_empty": {
+    "message": "Додайте e-mail акаунтів, у які ви вже ввійшли в цьому браузері."
+  },
+  "add": {
+    "message": "Додати"
+  },
+  "remove_account": {
+    "message": "Видалити $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@gmail.com"
+      }
+    }
+  },
+  "no_default": {
+    "message": "— не змінювати —"
+  },
+  "hint_before": {
+    "message": "Паролі не зберігаються: лише"
+  },
+  "hint_after": {
+    "message": "у посиланнях."
+  },
+  "accounts_click_to_open": {
+    "message": "Натисніть на акаунт, щоб відкрити в ньому $SERVICE$",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "add_account": {
+    "message": "Додати акаунт"
+  },
+  "new_email_label": {
+    "message": "E-mail акаунта"
+  },
+  "cancel": {
+    "message": "Скасувати"
+  },
+  "err_email": {
+    "message": "Це не схоже на e-mail."
+  },
+  "err_duplicate": {
+    "message": "Цей акаунт уже є в списку."
+  },
+  "removed": {
+    "message": "Видалено $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "undo": {
+    "message": "Повернути"
+  },
+  "more_services": {
+    "message": "+ ще $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "pin_all": {
+    "message": "Відкривати всі сервіси в цьому акаунті"
+  },
+  "unpin_all": {
+    "message": "Більше не використовувати цей акаунт за замовчуванням"
+  },
+  "exceptions": {
+    "message": "Винятки"
+  },
+  "exceptions_help": {
+    "message": "Усі сервіси відкриваються в акаунті за замовчуванням. Натисніть на сервіс, щоб вибрати інший."
+  },
+  "exceptions_help_no_default": {
+    "message": "Наведіть на акаунт і натисніть «за замовчуванням», щоб відкривати в ньому всі сервіси, або виберіть акаунт для окремих."
+  },
+  "inherit_default": {
+    "message": "Як у всіх: $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "skip": {
+    "message": "Не перемикати"
+  },
+  "account_for": {
+    "message": "Акаунт для $SERVICE$",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "default_account": {
+    "message": "за замовчуванням"
+  },
+  "current_hint": {
+    "message": "$SERVICE$ відкрито в цьому акаунті",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "settings": {
+    "message": "Налаштування"
+  },
+  "back": {
+    "message": "Назад"
+  },
+  "theme": {
+    "message": "Тема"
+  },
+  "theme_system": {
+    "message": "Системна"
+  },
+  "theme_light": {
+    "message": "Світла"
+  },
+  "theme_dark": {
+    "message": "Темна"
+  },
+  "language": {
+    "message": "Мова"
+  },
+  "language_auto": {
+    "message": "Мова браузера"
+  },
+  "privacy_link": {
+    "message": "Політика конфіденційності"
+  }
+}

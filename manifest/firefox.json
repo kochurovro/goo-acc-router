@@ -1,7 +1,9 @@
 {
   "background": {
     "scripts": [
+      "config.js",
       "services.js",
+      "analytics.js",
       "background.js"
     ]
   },
@@ -12,6 +14,9 @@
       "data_collection_permissions": {
         "required": [
           "none"
+        ],
+        "optional": [
+          "technicalAndInteraction"
         ]
       }
     }

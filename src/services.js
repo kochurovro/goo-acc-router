@@ -1,5 +1,5 @@
-// Список сервисов Google. key -> { name, hosts }
-// Совпадение по host (точное или поддомен).
+// Google services. key -> { name, hosts }
+// Matched by host (exact or subdomain). All hosts must be covered by manifest host_permissions.
 const SERVICES = {
   gmail:    { name: "Gmail",          hosts: ["mail.google.com"] },
   drive:    { name: "Google Drive",   hosts: ["drive.google.com"] },
@@ -38,7 +38,7 @@ function serviceForUrl(urlString) {
   return null;
 }
 
-// Уже есть явное указание аккаунта в URL?
+// Does the URL already specify an account explicitly?
 function urlHasAccount(urlString) {
   const url = new URL(urlString);
   if (url.searchParams.has("authuser")) return true;
@@ -52,4 +52,17 @@ function withAccount(urlString, email) {
   return url.toString();
 }
 
-if (typeof module !== "undefined") module.exports = { SERVICES, serviceForUrl, urlHasAccount, withAccount };
+// Settings model: one default account for every service (defaultAll) plus per-service exceptions
+// (defaults[service]): either another account, or SKIP = "leave this service alone".
+const SKIP = "__skip__";
+
+// Which account a service should open in, or null to leave the URL untouched.
+function accountFor(service, { accounts = [], defaults = {}, defaultAll = "" } = {}) {
+  const exception = defaults[service];
+  if (exception === SKIP) return null;
+  // An exception pointing at an account that is no longer in the list falls back to the default.
+  const email = exception && accounts.includes(exception) ? exception : defaultAll;
+  return email && accounts.includes(email) ? email : null;
+}
+
+if (typeof module !== "undefined") module.exports = { SERVICES, SKIP, serviceForUrl, urlHasAccount, withAccount, accountFor };

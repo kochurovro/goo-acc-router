@@ -1,0 +1,181 @@
+{
+  "name": {
+    "message": "Goo Account Router"
+  },
+  "short_name": {
+    "message": "Goo Router"
+  },
+  "description": {
+    "message": "Google の各サービスを選んだアカウントで開きます。Gmail は仕事用、YouTube は個人用に。"
+  },
+  "action_title": {
+    "message": "Goo Account Router"
+  },
+  "html_lang": {
+    "message": "ja"
+  },
+  "popup_title": {
+    "message": "Goo Account Router"
+  },
+  "auto_switch": {
+    "message": "自動切り替え"
+  },
+  "access_text": {
+    "message": "拡張機能に Google と YouTube のページへのアクセス権がないため、アカウントを切り替えられません。"
+  },
+  "access_button": {
+    "message": "Google サイトへのアクセスを許可"
+  },
+  "open_service_as": {
+    "message": "$EMAIL$ で $SERVICE$ を開く",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      },
+      "email": {
+        "content": "$2"
+      }
+    }
+  },
+  "accounts": {
+    "message": "アカウント"
+  },
+  "accounts_empty": {
+    "message": "このブラウザでログイン済みのアカウントのメールアドレスを追加してください。"
+  },
+  "add": {
+    "message": "追加"
+  },
+  "remove_account": {
+    "message": "$EMAIL$ を削除",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@gmail.com"
+      }
+    }
+  },
+  "no_default": {
+    "message": "— 変更しない —"
+  },
+  "hint_before": {
+    "message": "パスワードは保存しません。リンクに"
+  },
+  "hint_after": {
+    "message": "を付けるだけです。"
+  },
+  "accounts_click_to_open": {
+    "message": "アカウントをクリックすると、そのアカウントで $SERVICE$ を開きます",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "add_account": {
+    "message": "アカウントを追加"
+  },
+  "new_email_label": {
+    "message": "アカウントのメールアドレス"
+  },
+  "cancel": {
+    "message": "キャンセル"
+  },
+  "err_email": {
+    "message": "メールアドレスの形式ではありません。"
+  },
+  "err_duplicate": {
+    "message": "このアカウントはすでにリストにあります。"
+  },
+  "removed": {
+    "message": "$EMAIL$ を削除しました",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "undo": {
+    "message": "元に戻す"
+  },
+  "more_services": {
+    "message": "+ ほか $COUNT$ 件",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "pin_all": {
+    "message": "すべてのサービスをこのアカウントで開く"
+  },
+  "unpin_all": {
+    "message": "このアカウントをデフォルトにしない"
+  },
+  "exceptions": {
+    "message": "例外"
+  },
+  "exceptions_help": {
+    "message": "すべてのサービスはデフォルトのアカウントで開きます。別のアカウントにするにはサービスをクリックします。"
+  },
+  "exceptions_help_no_default": {
+    "message": "アカウントにカーソルを合わせて「デフォルト」をクリックすると全サービスで使われます。サービスごとに選ぶこともできます。"
+  },
+  "inherit_default": {
+    "message": "全体と同じ: $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "skip": {
+    "message": "切り替えない"
+  },
+  "account_for": {
+    "message": "$SERVICE$ のアカウント",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "default_account": {
+    "message": "デフォルト"
+  },
+  "current_hint": {
+    "message": "$SERVICE$ はこのアカウントで開いています",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "settings": {
+    "message": "設定"
+  },
+  "back": {
+    "message": "戻る"
+  },
+  "theme": {
+    "message": "テーマ"
+  },
+  "theme_system": {
+    "message": "システム"
+  },
+  "theme_light": {
+    "message": "ライト"
+  },
+  "theme_dark": {
+    "message": "ダーク"
+  },
+  "language": {
+    "message": "言語"
+  },
+  "language_auto": {
+    "message": "ブラウザの言語"
+  },
+  "privacy_link": {
+    "message": "プライバシーポリシー"
+  }
+}

@@ -1,15 +1,30 @@
 {
-  "name": "google-account-router",
-  "version": "1.0.0",
+  "name": "goo-account-router",
+  "version": "1.1.0",
   "private": true,
   "description": "Browser extension: opens each Google service in your chosen default account.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kochurovro/goo-acc-router.git"
+  },
+  "homepage": "https://goo-account-router.web.app",
+  "bugs": {
+    "url": "https://github.com/kochurovro/goo-acc-router/issues"
+  },
   "type": "module",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "build:chromium": "node scripts/build.mjs chromium",
     "build:firefox": "node scripts/build.mjs firefox",
-    "lint:firefox": "npx --yes web-ext lint --source-dir dist/firefox"
+    "lint:firefox": "npx --yes web-ext lint --source-dir dist/firefox",
+    "sign:firefox": "BUILD_CHANNEL=self npm run build:firefox && set -a && . ./.env && set +a && npx --yes web-ext sign --source-dir dist/firefox --channel unlisted --artifacts-dir dist/signed",
+    "build:privacy": "node scripts/build-privacy.mjs",
+    "deploy:privacy": "npm run deploy:site",
+    "build:site": "node scripts/build-site.mjs",
+    "deploy:site": "node scripts/build-site.mjs && cd firebase && firebase deploy --only hosting --project goo-account-router"
   }
 }

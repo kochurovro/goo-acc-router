@@ -1,0 +1,181 @@
+{
+  "name": {
+    "message": "Goo Account Router"
+  },
+  "short_name": {
+    "message": "Goo Router"
+  },
+  "description": {
+    "message": "Google 서비스마다 원하는 계정으로 엽니다. Gmail은 업무용, YouTube는 개인용으로."
+  },
+  "action_title": {
+    "message": "Goo Account Router"
+  },
+  "html_lang": {
+    "message": "ko"
+  },
+  "popup_title": {
+    "message": "Goo Account Router"
+  },
+  "auto_switch": {
+    "message": "자동 전환"
+  },
+  "access_text": {
+    "message": "확장 프로그램이 Google 및 YouTube 페이지에 접근할 수 없어 계정을 전환할 수 없습니다."
+  },
+  "access_button": {
+    "message": "Google 사이트 접근 허용"
+  },
+  "open_service_as": {
+    "message": "$EMAIL$ 계정으로 $SERVICE$ 열기",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      },
+      "email": {
+        "content": "$2"
+      }
+    }
+  },
+  "accounts": {
+    "message": "계정"
+  },
+  "accounts_empty": {
+    "message": "이 브라우저에서 이미 로그인한 계정의 이메일 주소를 추가하세요."
+  },
+  "add": {
+    "message": "추가"
+  },
+  "remove_account": {
+    "message": "$EMAIL$ 삭제",
+    "placeholders": {
+      "email": {
+        "content": "$1",
+        "example": "name@gmail.com"
+      }
+    }
+  },
+  "no_default": {
+    "message": "— 변경 안 함 —"
+  },
+  "hint_before": {
+    "message": "비밀번호는 저장하지 않습니다. 링크에"
+  },
+  "hint_after": {
+    "message": "만 붙입니다."
+  },
+  "accounts_click_to_open": {
+    "message": "계정을 클릭하면 그 계정으로 $SERVICE$이(가) 열립니다",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "add_account": {
+    "message": "계정 추가"
+  },
+  "new_email_label": {
+    "message": "계정 이메일"
+  },
+  "cancel": {
+    "message": "취소"
+  },
+  "err_email": {
+    "message": "올바른 이메일 주소가 아닙니다."
+  },
+  "err_duplicate": {
+    "message": "이미 목록에 있는 계정입니다."
+  },
+  "removed": {
+    "message": "$EMAIL$ 삭제됨",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "undo": {
+    "message": "실행 취소"
+  },
+  "more_services": {
+    "message": "+ 서비스 $COUNT$개 더보기",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "pin_all": {
+    "message": "모든 서비스를 이 계정으로 열기"
+  },
+  "unpin_all": {
+    "message": "이 계정을 기본값으로 사용 안 함"
+  },
+  "exceptions": {
+    "message": "예외"
+  },
+  "exceptions_help": {
+    "message": "모든 서비스가 기본 계정으로 열립니다. 다른 계정을 고르려면 서비스를 클릭하세요."
+  },
+  "exceptions_help_no_default": {
+    "message": "계정에 마우스를 올리고 ‘기본 계정’을 클릭하면 모든 서비스에 사용됩니다. 서비스별로 계정을 고를 수도 있습니다."
+  },
+  "inherit_default": {
+    "message": "전체와 동일: $EMAIL$",
+    "placeholders": {
+      "email": {
+        "content": "$1"
+      }
+    }
+  },
+  "skip": {
+    "message": "전환 안 함"
+  },
+  "account_for": {
+    "message": "$SERVICE$ 계정",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "default_account": {
+    "message": "기본 계정"
+  },
+  "current_hint": {
+    "message": "$SERVICE$이(가) 이 계정으로 열려 있습니다",
+    "placeholders": {
+      "service": {
+        "content": "$1"
+      }
+    }
+  },
+  "settings": {
+    "message": "설정"
+  },
+  "back": {
+    "message": "뒤로"
+  },
+  "theme": {
+    "message": "테마"
+  },
+  "theme_system": {
+    "message": "시스템"
+  },
+  "theme_light": {
+    "message": "라이트"
+  },
+  "theme_dark": {
+    "message": "다크"
+  },
+  "language": {
+    "message": "언어"
+  },
+  "language_auto": {
+    "message": "브라우저 언어"
+  },
+  "privacy_link": {
+    "message": "개인정보처리방침"
+  }
+}
